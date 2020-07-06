@@ -1,7 +1,7 @@
 /*
  * @Author: Jin X
  * @Date: 2020-07-02 16:53:38
- * @LastEditTime: 2020-07-03 16:36:18
+ * @LastEditTime: 2020-07-06 20:28:37
  */
 
 import { ACTIONS } from "./constants";
@@ -34,4 +34,12 @@ export const toggleTodo = id => ({
 export const setFilter = filter => ({
     type: ACTIONS.SET_FILTER,
     payload: {filter}
+})
+
+export const toggleAll = () => ({
+    type:ACTIONS.TOGGLE_ALL,
+})
+
+export const removeCompleted = () => ({
+    type: ACTIONS.REMOVE_COMPLETED,
 })

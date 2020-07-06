@@ -1,20 +1,21 @@
 /*
  * @Author: Jin X
  * @Date: 2020-07-02 16:59:58
- * @LastEditTime: 2020-07-05 00:52:53
- */ 
+ * @LastEditTime: 2020-07-06 20:32:31
+ */
+
 import { FILTERS, ACTIONS } from "./constants";
 
 const initialState = {
     allIds: [],
     allTodos: {},
-    filter: FILTERS.ALL
+    filter: FILTERS.ALL,
 };
 
 export default function todoReducer(state = initialState, action) {
     switch (action.type) {
         case ACTIONS.ADD_TODO: {
-            let { id, content} = action.payload;
+            const { id, content } = action.payload;
             return {
                 ...state,
                 allIds: [...state.allIds, id],
@@ -22,54 +23,79 @@ export default function todoReducer(state = initialState, action) {
                     ...state.allTodos,
                     [id]: {
                         content,
-                        completed: false
-                    }
-                }
+                        completed: false,
+                    },
+                },
             };
-        }
+        };
         case ACTIONS.REMOVE_TODO: {
-            let { id } = action.payload;
+            const { id } = action.payload;
             // delete state.allTodos[id];
-            let newTodos = Object.assign({}, state.allTodos);
+            const newTodos = Object.assign({}, state.allTodos);
             delete newTodos[id];
             return {
                 ...state,
-                allIds: state.allIds.filter(e => e !== id),
-                allTodos: newTodos
-            }
-        }
+                allIds: state.allIds.filter((e) => e !== id),
+                allTodos: newTodos,
+            };
+        };
         case ACTIONS.CHANGE_TODO: {
-            let { id, content } = action.payload;
+            const { id, content } = action.payload;
             return {
                 ...state,
                 allTodos: {
                     ...state.allTodos,
                     [id]: {
                         content,
-                        completed: false
-                    }
-                }
-            }
-        }
+                        completed: false,
+                    },
+                },
+            };
+        };
         case ACTIONS.TOGGLE_TODO: {
-            let { id } = action.payload;
+            const { id } = action.payload;
             return {
                 ...state,
                 allTodos: {
                     ...state.allTodos,
                     [id]: {
                         ...state.allTodos[id],
-                        completed: !state.allTodos[id].completed
-                    }
-                }
+                        completed: !state.allTodos[id].completed,
+                    },
+                },
             };
-        }
-        case ACTIONS.SET_FILTER: {
+        };
+        case ACTIONS.SET_FILTER: 
             return {
                 ...state,
                 filter: action.payload.filter,
             };
-        }
-        default:return state;
+        case ACTIONS.TOGGLE_ALL: {
+            const { allIds, allTodos } = { ...state };
+            const newTodos = Object.assign({}, allTodos);
+            let allCompleted = true;
+            for (let id of allIds)
+                if (allTodos[id].completed === false) {
+                    allCompleted = false;
+                    break;
+                };
+            allIds.forEach((id) => newTodos[id].completed = allCompleted ? false : true);
+            return {
+                ...state,
+                allTodos: newTodos,
+            };
+        };
+        case ACTIONS.REMOVE_COMPLETED: 
+            const { allIds, allTodos } = { ...state };
+            const newTodos = {}
+            const newIds = allIds.filter(id => !allTodos[id].completed);
+            newIds.forEach(id => newTodos[id] = allTodos[id]);
+            return {
+                ...state,
+                allIds: newIds,
+                allTodos: newTodos,
+            }
+        default:
+            return state;
     }
-};
+}
