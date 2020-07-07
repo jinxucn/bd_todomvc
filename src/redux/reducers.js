@@ -1,16 +1,20 @@
 /*
  * @Author: Jin X
  * @Date: 2020-07-02 16:59:58
- * @LastEditTime: 2020-07-06 20:32:31
+ * @LastEditTime: 2020-07-07 13:02:55
  */
 
 import { FILTERS, ACTIONS } from "./constants";
+import {loadState} from "./localStorage"
 
-const initialState = {
+
+const initialState = loadState() || {
     allIds: [],
     allTodos: {},
     filter: FILTERS.ALL,
 };
+
+console.log('here');
 
 export default function todoReducer(state = initialState, action) {
     switch (action.type) {

@@ -12,6 +12,13 @@ import store from "./redux/store";
 
 import TodoApp from "./components/App";
 
+import { saveState } from "./redux/localStorage";
+
+window.onbeforeunload = (e) => {
+    console.log(store.getState());
+    saveState(store.getState());
+}
+
 const root = document.getElementById("root");
 ReactDOM.render(
     <Provider store={store}>

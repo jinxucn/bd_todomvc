@@ -93,6 +93,7 @@ body {
     border: 0;
     background-color: rgba(0, 0, 0, 0);
     opacity: 0.4;
+    outline: none;
 }
 .todo-item button:hover {
     opacity: 1;
@@ -163,6 +164,7 @@ body {
     line-height: 20px;
     color: rgba(13, 175, 13, 0.5);
     user-select: none;
+    outline: none;
 }
 .toggle-all:hover {
     color: rgba(13, 175, 13, 1);
