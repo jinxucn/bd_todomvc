@@ -1,16 +1,16 @@
 /*
  * @Author: Jin X
  * @Date: 2020-07-02 16:53:38
- * @LastEditTime: 2020-07-06 20:28:37
+ * @LastEditTime: 2020-07-08 23:30:30
  */
 
 import { ACTIONS } from "./constants";
-let todoId = 0;
+// let todoId = 0;
 
 export const addTodo = content => ({
     type: ACTIONS.ADD_TODO,
     payload: {
-        id: ++todoId,
+        id: new Date().getTime(),
         content: content,
     },
 });

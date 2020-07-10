@@ -1,7 +1,7 @@
 /*
  * @Author: Jin X
  * @Date: 2020-07-02 16:59:58
- * @LastEditTime: 2020-07-07 13:02:55
+ * @LastEditTime: 2020-07-08 23:33:25
  */
 
 import { FILTERS, ACTIONS } from "./constants";
@@ -14,12 +14,13 @@ const initialState = loadState() || {
     filter: FILTERS.ALL,
 };
 
-console.log('here');
+// console.log('here');
 
 export default function todoReducer(state = initialState, action) {
     switch (action.type) {
         case ACTIONS.ADD_TODO: {
             const { id, content } = action.payload;
+            // console.log(id, content);
             return {
                 ...state,
                 allIds: [...state.allIds, id],
