@@ -10,12 +10,15 @@
         "hoist-non-react-statics": "^3.3.2",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
+        "react-redux": "^7.2.0",
         "react-scripts": "3.4.1",
         "redux": "^4.0.5"
     },
+    "main": "user.js",
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build",
+        "build": "webpack --config webpack.config.js",
+        "dev": "webpack-dev-server --hot --inline --content-base ./dist --config webpack.config.js",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },
@@ -34,5 +37,16 @@
             "last 1 safari version"
         ]
     },
-    "homepage": "./"
+    "homepage": "./",
+    "devDependencies": {
+        "@babel/preset-env": "^7.10.4",
+        "@babel/preset-react": "^7.10.4",
+        "babel-core": "^6.26.3",
+        "babel-loader": "^8.1.0",
+        "css-loader": "^3.6.0",
+        "html-webpack-plugin": "^4.3.0",
+        "webpack": "^4.43.0",
+        "webpack-cli": "^3.3.12",
+        "webpack-dev-server": "^3.11.0"
+    }
 }
