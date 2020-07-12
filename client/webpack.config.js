@@ -1,7 +1,7 @@
 /*
  * @Author: Jin X
  * @Date: 2020-07-10 15:16:40
- * @LastEditTime: 2020-07-10 19:43:05
+ * @LastEditTime: 2020-07-11 15:13:42
  */ 
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -13,7 +13,7 @@ module.exports = (env, argv) => ({
         users:"./src/users.js"
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, '../server/public'),
         filename: '[name].js',
     },
     module: {
@@ -47,6 +47,28 @@ module.exports = (env, argv) => ({
         // 	})
     ],
     devServer: {
-        open:true
+        // open: true,
+        contentBase: path.resolve(__dirname, '../server/public'),
+        quiet: false,
+        noInfo: false,
+        hot: true,
+        inline: true,
+        lazy:false,
+        progress: true,
+        // port:'80'
+        proxy: {
+            '/login': {
+                target: 'http://localhost:3000/users/',
+                // pathRewrite: {"^/api": "/login"},
+                changeOrigin: true,
+                secure: false
+            },
+            '/todo': {
+                target: 'http://localhost:3000/',
+                pathRewrite: {"^/todo": "/todo/actions"},
+                changeOrigin: true,
+                secure: false
+            }
+        }
     }
 })

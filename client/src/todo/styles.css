@@ -203,3 +203,8 @@ body {
     color: rgba(197,25,25,0,7);
     cursor: pointer;
 }
+.logout{
+    position: fixed;
+    top:0;
+    right: 0;
+}

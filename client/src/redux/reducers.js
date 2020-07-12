@@ -1,12 +1,12 @@
 /*
  * @Author: Jin X
  * @Date: 2020-07-02 16:59:58
- * @LastEditTime: 2020-07-08 23:33:25
+ * @LastEditTime: 2020-07-11 18:53:51
  */
 
 import { FILTERS, ACTIONS } from "./constants";
-import {loadState} from "./localStorage"
-
+import { loadState } from "./localStorage";
+import request from "../request";
 
 const initialState = loadState() || {
     allIds: [],
@@ -18,9 +18,18 @@ const initialState = loadState() || {
 
 export default function todoReducer(state = initialState, action) {
     switch (action.type) {
+        case ACTIONS.GET_ALL: {
+            const { allIds, allTodos } = action.payload;
+            return {
+                ...state,
+                allIds: allIds,
+                allTodos: allTodos,
+            };
+        };
         case ACTIONS.ADD_TODO: {
             const { id, content } = action.payload;
             // console.log(id, content);
+            request.addTodo(id, content);
             return {
                 ...state,
                 allIds: [...state.allIds, id],
@@ -32,20 +41,22 @@ export default function todoReducer(state = initialState, action) {
                     },
                 },
             };
-        };
+        }
         case ACTIONS.REMOVE_TODO: {
             const { id } = action.payload;
             // delete state.allTodos[id];
             const newTodos = Object.assign({}, state.allTodos);
             delete newTodos[id];
+            request.removeTodo(id);
             return {
                 ...state,
                 allIds: state.allIds.filter((e) => e !== id),
                 allTodos: newTodos,
             };
-        };
-        case ACTIONS.CHANGE_TODO: {
+        }
+        case ACTIONS.RENAME_TODO: {
             const { id, content } = action.payload;
+            request.renameTodo(id, content);
             return {
                 ...state,
                 allTodos: {
@@ -56,21 +67,23 @@ export default function todoReducer(state = initialState, action) {
                     },
                 },
             };
-        };
+        }
         case ACTIONS.TOGGLE_TODO: {
             const { id } = action.payload;
+            const tg = !state.allTodos[id].completed;
+            request.toggleTodo(id, tg);
             return {
                 ...state,
                 allTodos: {
                     ...state.allTodos,
                     [id]: {
                         ...state.allTodos[id],
-                        completed: !state.allTodos[id].completed,
+                        completed: tg
                     },
                 },
             };
-        };
-        case ACTIONS.SET_FILTER: 
+        }
+        case ACTIONS.SET_FILTER:
             return {
                 ...state,
                 filter: action.payload.filter,
@@ -83,23 +96,25 @@ export default function todoReducer(state = initialState, action) {
                 if (allTodos[id].completed === false) {
                     allCompleted = false;
                     break;
-                };
-            allIds.forEach((id) => newTodos[id].completed = allCompleted ? false : true);
+                }
+            request.toggleAll(!allCompleted);
+            allIds.forEach( id => newTodos[id].completed = !allCompleted);
             return {
                 ...state,
                 allTodos: newTodos,
             };
-        };
-        case ACTIONS.REMOVE_COMPLETED: 
+        }
+        case ACTIONS.REMOVE_COMPLETED:
             const { allIds, allTodos } = { ...state };
-            const newTodos = {}
-            const newIds = allIds.filter(id => !allTodos[id].completed);
-            newIds.forEach(id => newTodos[id] = allTodos[id]);
+            const newTodos = {};
+            const newIds = allIds.filter((id) => !allTodos[id].completed);
+            newIds.forEach((id) => (newTodos[id] = allTodos[id]));
+            request.removeCompleted();
             return {
                 ...state,
                 allIds: newIds,
                 allTodos: newTodos,
-            }
+            };
         default:
             return state;
     }
