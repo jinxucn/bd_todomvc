@@ -4,12 +4,12 @@
 
  */
 
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import cx from "classnames";
 import { toggleTodo, removeTodo, renameTodo } from "../redux/actions";
 
-class TodoItem extends PureComponent {
+class TodoItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -49,10 +49,25 @@ class TodoItem extends PureComponent {
                 <div
                     className={cx(
                         "todo-item",
-                        !this.props.todo.completed ? "active-todo" : "completed-todo"
+                        !this.props.todo.completed
+                            ? "active-todo"
+                            : "completed-todo"
                     )}
                 >
-                    {this.props.todo.completed ? (
+                    <div className="checkbox"
+                        onClick={this.handleToggle}
+                    >
+                        <label
+                            className={this.props.todo.completed?"checked":"unchecked"}
+                        />
+                        {/* <input
+                            type="checkbox"
+                            defaultChecked={this.props.todo.completed}
+                            onChange={this.handleToggle}
+                        /> */}
+
+                    </div>
+                    {/* {console.log(this.props.todo.completed)||this.props.todo.completed ? (
                         <input
                             type="checkbox"
                             checked="checked"
@@ -60,36 +75,49 @@ class TodoItem extends PureComponent {
                         />
                     ) : (
                         <input type="checkbox" onChange={this.handleToggle} />
-                    )}
+                    )} */}
                     <div
                         className={cx(
                             "todo-content",
                             this.state.editing ? "edit-content" : "view-content"
                         )}
-                        onDoubleClick={this.props.todo.completed ? () => false : (e => {
-                            this.setState({ editing: true });
-                            e.target.lastElementChild.focus();
-                        })}
+                        onDoubleClick={
+                            this.props.todo.completed
+                                ? () => false
+                                : (e) => {
+                                      this.setState({ editing: true });
+                                      e.target.lastElementChild.focus();
+                                  }
+                        }
                     >
                         <label
-                            onDoubleClick={this.props.todo.completed?()=>false: (e => {
-                                this.setState({ editing: true });
-                                e.target.nextElementSibling.focus();
-                                e.stopPropagation();
-                            })}>{this.state.content}</label>
+                            onDoubleClick={
+                                this.props.todo.completed
+                                    ? () => false
+                                    : (e) => {
+                                          this.setState({ editing: true });
+                                          e.target.nextElementSibling.focus();
+                                          e.stopPropagation();
+                                      }
+                            }
+                        >
+                            {this.state.content}
+                        </label>
                         {!this.props.todo.completed && (
                             <input
-                                value={this.state.content||""}
+                                value={this.state.content || ""}
                                 onChange={this.handleChange}
                                 onKeyDown={(e) => {
                                     e.keyCode === 13 && e.target.blur();
                                 }}
-                                onDoubleClick={e=>e.stopPropagation()}
+                                onDoubleClick={(e) => e.stopPropagation()}
                                 onBlur={this.handleRename}
                             />
                         )}
                     </div>
-                    <button onClick={this.handleRemove}><div></div></button>
+                    <button onClick={this.handleRemove}>
+                        <div></div>
+                    </button>
                 </div>
             </li>
         );
